@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="page-content mx-auto">
+        <div class="page-content">
+            <h1>Connect4AI</h1>
+            <hr><br>
+            <div class="row">
+                <div class="col-lg-5 my-auto">
+                    <div class="mx-auto" style="text-align:center"><img style="max-width: 600px;" alt="Picture of a Connect 4 Board" src="{{ url_for('static', filename='images/board.png') }}"></div>
+                </div>
+                <div class="col-lg-7 my-auto mx-auto" style="text-align: center; padding:1rem">
+                    <div class="row">
+                        <div class="col">
+                            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                <label class="btn btn-outline-warning active" onclick="playAgainstAIRadioButton()">
+                                    <input type="radio" name="options" id="option1" checked> Play Against AI
+                                </label>
+                                <label class="btn btn-outline-warning" onclick="playAgainstFriendRadioButton()">
+                                    <input type="radio" name="options" id="option2"> Play Against A Friend
+                                </label>
+                            </div>
+                        </div>
+                    </div><br>
+                    <div id="playAgainstAIOptions" class="row">
+                        <div class="col">
+                            <h5>AI Difficulty</h5>
+                            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                <label class="btn btn-outline-success active" onclick="changedAIDifficulty('success')">
+                                    <input type="radio" name="options" id="easyAIButton" checked> Easy
+                                </label>
+                                <label class="btn btn-outline-warning" onclick="changedAIDifficulty('warning')">
+                                    <input type="radio" name="options" id="mediumAIButton"> Medium
+                                </label>
+                                <label class="btn btn-outline-danger" onclick="changedAIDifficulty('danger')">
+                                    <input type="radio" name="options" id="hardAIButton"> Hard
+                                </label>
+                                <label class="btn btn-outline-dark" onclick="changedAIDifficulty('dark')">
+                                    <input type="radio" name="options" id="impossibleAIButton"> Impossible
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="playAgainstHumanOptions" class="row" style="display:none">
+                        <div class="col">
+                            Play Against Friend!
+                        </div>
+                    </div>
+                    <br>
+                    <!-- Button trigger modal -->
+                    <button id="beginGameButton" type="button" class="btn btn-success btn-lg btn-icon" data-toggle="modal" data-target="#exampleModal">
+                        <span class="btn-inner--text">Begin Game</span>
+                        <span class="btn-inner--icon"><i class="fas fa-play"></i></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    ...
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
