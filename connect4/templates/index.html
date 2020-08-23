@@ -7,7 +7,7 @@
             <hr><br>
             <div class="row">
                 <div class="col-lg-5 my-auto">
-                    <div class="mx-auto" style="text-align:center"><img style="max-width: 600px;" alt="Picture of a Connect 4 Board" src="{{ url_for('static', filename='images/board.png') }}"></div>
+                    <div class="mx-auto mb-5" style="text-align:center"><img style="max-width: 600px;" alt="Picture of a Connect 4 Board" src="{{ url_for('static', filename='images/board.png') }}"></div>
                 </div>
                 <div class="col-lg-7 my-auto mx-auto" style="text-align: center; padding:1rem">
                     <div class="row">
@@ -21,7 +21,13 @@
                                 </label>
                             </div>
                         </div>
-                    </div><br>
+                    </div><br><br>
+                    <div class="row">
+                        <div class="col">
+                            <h5>Player 1 Name</h5>
+                            <input id="player1Name" type="text" class="form-control mx-auto" style="max-width:400px" placeholder="Player 1">
+                        </div>
+                    </div><br><br>
                     <div id="playAgainstAIOptions" class="row">
                         <div class="col">
                             <h5>AI Difficulty</h5>
@@ -43,32 +49,106 @@
                     </div>
                     <div id="playAgainstHumanOptions" class="row" style="display:none">
                         <div class="col">
-                            Play Against Friend!
+                            <h5>Player 2 Name</h5>
+                            <input id="player2Name" type="text" class="form-control mx-auto" style="max-width:400px" placeholder="Player 2">
                         </div>
                     </div>
-                    <br>
+                    <br><br>
                     <!-- Button trigger modal -->
-                    <button id="beginGameButton" type="button" class="btn btn-success btn-lg btn-icon" data-toggle="modal" data-target="#exampleModal">
+                    <button id="beginGameButton" type="button" class="btn btn-success btn-lg btn-icon" data-toggle="modal" data-target="#connect4Modal" onclick="initializeGame()">
                         <span class="btn-inner--text">Begin Game</span>
                         <span class="btn-inner--icon"><i class="fas fa-play"></i></span>
                     </button>
                 </div>
             </div>
+            <br><br>
+            <h2>Development</h2>
+            <hr>
+
         </div>
     </div>
 
+    <!-- Hidden Tags -->
+    <input type="hidden" id="AIDifficulty" value="Easy">
+    <input type="hidden" id="gameBoard">
+    <input type="hidden" id="currentPlayer">
+
     <!-- Modal -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
+    <div class="modal fade" id="connect4Modal" data-backdrop="static" tabindex="-1" aria-labelledby="connect4Modal" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                    <h2 class="modal-title" id="connect4ModalTitle">Connect 4</h2>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body">
-                    ...
+                <div class="modal-body" style="text-align: center;">
+                    <table id="connect4Board" class="connect4-board mx-auto">
+                        <tr class="row-above">
+                            <td>a</td>
+                            <td>a</td>
+                            <td>a</td>
+                            <td>a</td>
+                            <td>a</td>
+                            <td>a</td>
+                            <td>a</td>
+                        </tr>
+                        <tr class="c4-row">
+                            <td>a</td>
+                            <td>a</td>
+                            <td>a</td>
+                            <td>a</td>
+                            <td>a</td>
+                            <td>a</td>
+                            <td>a</td>
+                        </tr>
+                        <tr class="c4-row">
+                            <td>a</td>
+                            <td>a</td>
+                            <td>a</td>
+                            <td>a</td>
+                            <td>a</td>
+                            <td>a</td>
+                            <td>a</td>
+                        </tr>
+                        <tr class="c4-row">
+                            <td>a</td>
+                            <td>a</td>
+                            <td>a</td>
+                            <td>a</td>
+                            <td>a</td>
+                            <td>a</td>
+                            <td>a</td>
+                        </tr>
+                        <tr class="c4-row">
+                            <td>a</td>
+                            <td>a</td>
+                            <td>a</td>
+                            <td>a</td>
+                            <td>a</td>
+                            <td>a</td>
+                            <td>a</td>
+                        </tr>
+                        <tr class="c4-row">
+                            <td>a</td>
+                            <td>a</td>
+                            <td>a</td>
+                            <td>a</td>
+                            <td>a</td>
+                            <td>a</td>
+                            <td>a</td>
+                        </tr>
+                        <tr class="c4-row">
+                            <td>a</td>
+                            <td>a</td>
+                            <td>a</td>
+                            <td>a</td>
+                            <td>a</td>
+                            <td>a</td>
+                            <td>a</td>
+                        </tr>
+                    </table>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
