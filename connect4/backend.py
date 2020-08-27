@@ -93,7 +93,6 @@ def makeMove(data):
     else:
         updatedData["Player"] = (int(playerIndex) + 1) % 2
     updatedData["Win"] = win
-    print("Got here")
     return updatedData
 
 def makeHumanMove(board, playerIndex, colInd):
@@ -131,20 +130,14 @@ def makeAIMove(board, playerIndex, depth):
     for move in validMoves:
         nextState, c, r = getNextState(board, move, playerIndex)
         #score = estimateStateValue(nextState, c, r, depth, (playerIndex+1)%2, False)
-        score = minimax(nextState, depth-1, (playerIndex+1)%2, False, c, r)
-        print("Score: " + str(score))
+        score = minimax(nextState, depth-1, -1*float('inf'), float('inf'), (playerIndex+1)%2, False, c, r)
         if score > bestScore:
             bestC = c
             bestR = r
             bestScore = score
-    print("Examined all moves")
     # update the board
     board[bestC][bestR] = str(playerIndex)
     # check if this move resulted in a win, and if so return true and None for the error message
-    print("---------")
-    print(board)
-    print(bestC, bestR)
-    print("isWin: " + str(isWin(board, bestC, bestR)))
     return isWin(board, bestC, bestR), None
 
 def getValidMoves(board):
@@ -173,7 +166,7 @@ def getNextState(board, colInd, playerIndex):
     boardCopy[colInd][rowInd] = str(playerIndex)
     return (boardCopy, colInd, rowInd)
 
-def minimax(board, depth, playerIndex, maximizingPlayer, colInd, rowInd):
+def minimax(board, depth, alpha, beta, playerIndex, maximizingPlayer, colInd, rowInd):
     """ Function that uses the minimax algorithm to decide which move to make """
     if isWin(board, colInd, rowInd):
         if playerIndex == board[colInd][rowInd]:
@@ -187,14 +180,20 @@ def minimax(board, depth, playerIndex, maximizingPlayer, colInd, rowInd):
         validMoves = getValidMoves(board)
         for move in validMoves:
             nextState, c, r = getNextState(board, move, playerIndex)
-            value = max(value, minimax(nextState, depth-1, (playerIndex+1)%2, False, c, r))
+            value = max(value, minimax(nextState, depth-1, alpha, beta, (playerIndex+1)%2, False, c, r))
+            alpha = max(alpha, value)
+            if alpha >= beta:
+                break
         return value
     else:
         value = float('inf')
         validMoves = getValidMoves(board)
         for move in validMoves:
             nextState, c, r = getNextState(board, move, playerIndex)
-            value = min(value, minimax(nextState, depth-1, (playerIndex+1)%2, True, c, r))
+            value = min(value, minimax(nextState, depth-1, alpha, beta, (playerIndex+1)%2, True, c, r))
+            beta = min(beta, value)
+            if beta <= alpha:
+                break
         return value
 
 def evaluateBoard(board, playerIndex):
@@ -202,73 +201,15 @@ def evaluateBoard(board, playerIndex):
     value = 0 # the value of the board
     # Get the valid moves
     validMoves = getValidMoves(board)
-    print("Valid Moves: " + str(validMoves))
     # Get the index of the other player
     otherPlayerIndex = (playerIndex+1) % 2
-    print(playerIndex, otherPlayerIndex)
     for move in validMoves:
         # see if this move would allow our player to win
         hypotheticalBoard, c, r = getNextState(board, move, playerIndex)
         if isWin(hypotheticalBoard, c, r):
-            print("would be a win")
-            value += 100
+            value += 10
         # see if this move would allow the other player to win
         hypotheticalBoard, c, r = getNextState(board, move, otherPlayerIndex)
         if isWin(hypotheticalBoard, c, r):
-            print("would be a loss")
-            value -= 400
-    print("Value: " + str(value))
-    return value
-
-
-
-""" Probably gonna delete these bad boys """
-
-
-def estimateStateValue(board, colInd, rowInd, depth, playerIndex, minimizingPlayer):
-    """ Function that returns an estimate of the value of the given state (the board)
-        @param {object} board: the updated board
-        @param {int} colInd: the column index of the piece that was just placed
-        @param {int} rowInd: the row index of the piece that was just placed
-        @param {int} playerIndex: the index of the player considering which move to make
-        @param {boolean} maximizingPlayer: boolean representing whether or not the current player considering a move is the maximizing player
-        @return {int} returns the estimated value of the state using minimax """
-    if isWin(board, colInd, rowInd): # this move resulted in a winning state
-        if minimizingPlayer: # You are trying to minimize the other player's payoff, and you just won
-            return 1000
-        else: # ... and you just lost
-            return -1000
-    elif depth == 0: # we've reached the maximum depth, use the heuristic function
-        return evaluateBoard(board, playerIndex)
-    elif minimizingPlayer: # this is the minimizing player
-        return minValue(board, depth-1, playerIndex)
-    else: # this is the maximizing player
-        return maxValue(board, depth-1, playerIndex)
-
-def minValue(board, depth, playerIndex):
-    """ Function that finds the move that minimizes the score of the player 
-        @param {object} board: the durrent board
-        @param {int} depth: the current depth
-        @param {int} playerIndex: the index of the current player
-        @return {int} returns the min value of the player"""
-    value = float('inf')
-    validMoves = getValidMoves(board)
-    for move in validMoves:
-        nextState, c, r = getNextState(board, move, playerIndex)
-        # estimate the value of the next state
-        value = min(estimateStateValue(nextState, c, r, depth, (playerIndex+1)%2, False), value)
-    return value
-
-def maxValue(board, depth, playerIndex):
-    """ Function that finds the move that maximizes the score of the player 
-        @param {object} board: the current board
-        @param {int} depth: the current depth
-        @param {int} playerIndex: the index of the current player
-        @return {int} returns the max value of the player """
-    value = -1*float('inf')
-    validMoves = getValidMoves(board)
-    for move in validMoves:
-        nextState, c, r = getNextState(board, move, playerIndex)
-        # estimate the value of the next state
-        value = max(estimateStateValue(nextState, c, r, depth, (playerIndex+1)%2, True), value)
+            value -= 40
     return value
