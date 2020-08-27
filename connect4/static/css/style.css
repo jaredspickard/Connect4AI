@@ -39,7 +39,7 @@ img {
 
 .c4-piece-above:hover {
     transform: scale(1.1);
-    background-color: yellow;
+    background-color: lightslategray;
     cursor: pointer;
 }
 

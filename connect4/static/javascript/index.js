@@ -5,6 +5,7 @@
 function playAgainstAIRadioButton() {
     document.getElementById("playAgainstHumanOptions").style.display = "none";
     document.getElementById("playAgainstAIOptions").style.display = "block";
+    document.getElementById("opponentType").value = "AI";
 }
 
 /**
@@ -14,6 +15,7 @@ function playAgainstAIRadioButton() {
 function playAgainstFriendRadioButton() {
     document.getElementById("playAgainstAIOptions").style.display = "none";
     document.getElementById("playAgainstHumanOptions").style.display = "block";
+    document.getElementById("opponentType").value = "Human";
 }
 
 /**
@@ -56,7 +58,7 @@ function initializeGame() {
           board[c][r] = 'x';
       }
   }
-  board = JSON.stringify(board)
+  board = JSON.stringify(board);
   // Set the hidden tags to store these elements
   document.getElementById("gameBoard").value = board;
   document.getElementById("currentPlayer").value = currPlayer;
@@ -83,7 +85,7 @@ function updateBoard(board) {
             } else if (board[j][i] == 1) {
                 pieceClass = "c4-piece-red";
             } else {
-                pieceClass = "c4-piece-blank"
+                pieceClass = "c4-piece-blank";
             }
             htmlString += "<td class='grid-position'><span class='"+pieceClass+"'></span></td>";
         }
@@ -97,7 +99,6 @@ function updateBoard(board) {
  * @param {int} colNum 
  */
 function makeMove(colNum) {
-    alert(colNum);
     // Prepare the data to be sent to the server
     var data = {};
     data["Board"] = document.getElementById("gameBoard").value;
@@ -106,7 +107,7 @@ function makeMove(colNum) {
     data = JSON.stringify(data);
     console.log(data);
     // call the server to add a tile of the current player to the current board
-    $.post("makeMove", data, onSuccessMakeMove)
+    $.post("makeMove", data, onSuccessMakeMove);
     //stop link from reloading page
     event.preventDefault();
 }
@@ -120,15 +121,49 @@ function onSuccessMakeMove(retData) {
     // Unpack the data
     var updatedBoard = retData["Board"];
     var updatedPlayerIndex = retData["Player"];
-    var isWin = retData["IsWin"];
+    var isWin = retData["Win"];
+    // Update the board
+    updateBoard(updatedBoard);
+    // If the player index has changed, increment the move counter
+    if (updatedPlayerIndex != document.getElementById("currentPlayer").value) {
+        document.getElementById("moveCounter").value = (parseInt(document.getElementById("moveCounter").value, 10) + 1) + "";
+    }
+    console.log(document.getElementById("moveCounter").value);
+    // Do some UI stuff if the game is over
     if (isWin) {
         alert(updatedPlayerIndex + " wins!");
         // Show a new game button and some other UI stuff
+        return;
     }
-    // Update the board
-    updateBoard(updatedBoard);
+    if (document.getElementById("moveCounter").value == "42") {
+        alert("It's a tie!");
+        // Show a new game button and some other UI stuff
+        return;
+    }
     document.getElementById("gameBoard").value = JSON.stringify(updatedBoard);
     // Update the player index
     document.getElementById("currentPlayer").value = updatedPlayerIndex;
     // If playing against an AI, call make move again
+    if (document.getElementById("opponentType").value == "AI" && updatedPlayerIndex == 1) {
+        console.log("About to make AI move")
+        data = {};
+        data["Board"] = JSON.stringify(updatedBoard);
+        data["Player"] = updatedPlayerIndex;
+        data["ColumnNum"] = -1;
+        var AIDifficulty = document.getElementById("AIDifficulty").value;
+        if (AIDifficulty == "Easy") {
+            data["Depth"] = 3;
+        } else if (AIDifficulty == "Medium") {
+            data["Depth"] = 4;
+        } else if (AIDifficulty == "Hard") {
+            data["Depth"] = 5;
+        } else {
+            data["Depth"] = 6;
+        }
+        data = JSON.stringify(data);
+        // call the server to add a tile of the current player to the current board
+        $.post("makeMove", data, onSuccessMakeMove);
+        //stop link from reloading page
+        event.preventDefault();
+    }
 }

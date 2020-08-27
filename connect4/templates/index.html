@@ -69,9 +69,11 @@
     </div>
 
     <!-- Hidden Tags -->
+    <input type="hidden" id="opponentType" value="AI">
     <input type="hidden" id="AIDifficulty" value="Easy">
     <input type="hidden" id="gameBoard">
     <input type="hidden" id="currentPlayer">
+    <input type="hidden" id="moveCounter" value="0">
 
     <!-- Modal -->
     <div class="modal fade" id="connect4Modal" data-backdrop="static" tabindex="-1" aria-labelledby="connect4Modal" aria-hidden="true">
@@ -84,71 +86,7 @@
                     </button>
                 </div>
                 <div class="modal-body" style="text-align: center;">
-                    <table id="connect4Board" class="connect4-board mx-auto">
-                        <tr class="row-above">
-                            <td>a</td>
-                            <td>a</td>
-                            <td>a</td>
-                            <td>a</td>
-                            <td>a</td>
-                            <td>a</td>
-                            <td>a</td>
-                        </tr>
-                        <tr class="c4-row">
-                            <td>a</td>
-                            <td>a</td>
-                            <td>a</td>
-                            <td>a</td>
-                            <td>a</td>
-                            <td>a</td>
-                            <td>a</td>
-                        </tr>
-                        <tr class="c4-row">
-                            <td>a</td>
-                            <td>a</td>
-                            <td>a</td>
-                            <td>a</td>
-                            <td>a</td>
-                            <td>a</td>
-                            <td>a</td>
-                        </tr>
-                        <tr class="c4-row">
-                            <td>a</td>
-                            <td>a</td>
-                            <td>a</td>
-                            <td>a</td>
-                            <td>a</td>
-                            <td>a</td>
-                            <td>a</td>
-                        </tr>
-                        <tr class="c4-row">
-                            <td>a</td>
-                            <td>a</td>
-                            <td>a</td>
-                            <td>a</td>
-                            <td>a</td>
-                            <td>a</td>
-                            <td>a</td>
-                        </tr>
-                        <tr class="c4-row">
-                            <td>a</td>
-                            <td>a</td>
-                            <td>a</td>
-                            <td>a</td>
-                            <td>a</td>
-                            <td>a</td>
-                            <td>a</td>
-                        </tr>
-                        <tr class="c4-row">
-                            <td>a</td>
-                            <td>a</td>
-                            <td>a</td>
-                            <td>a</td>
-                            <td>a</td>
-                            <td>a</td>
-                            <td>a</td>
-                        </tr>
-                    </table>
+                    <table id="connect4Board" class="connect4-board mx-auto"></table>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
