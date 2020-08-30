@@ -14,6 +14,9 @@
 </head>
 
 <body style="font-family:Montserrat">
+    <!----------------------------- Hidden Tags ---------------------------------->
+    <input type="hidden" id="selectedPage">
+    <!------------------------------- Header ------------------------------------->
     <nav class="navbar navbar-expand-lg navbar-light bg-warning">
         <a class="navbar-brand" href="{{ url_for('index') }}" style="margin:0.5rem">
             <h4 style="font-weight:500">C4AI</h4>
@@ -24,10 +27,10 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav ml-auto" style="text-align: center;">
-                <li class="nav-item active">
+                <li id="homeOption" class="nav-item" onclick="clickHome()">
                     <a class="nav-link" href="{{ url_for('index') }}">Home</a>
                 </li>
-                <li class="nav-item">
+                <li id="leaderboardOption" class="nav-item" onclick="clickLeaderboard()">
                     <a class="nav-link" href="{{ url_for('leaderboard') }}">Leaderboard</a>
                 </li>
             </ul>
@@ -40,8 +43,7 @@
     <div class="bg-warning footer">
         <div class="row">
             <div class="col" style="text-align: center;">
-                <p style="font-size: 0.9rem; margin-top:1rem;">Copyright &copy;2020 All rights reserved | This website
-                    uses no templates and was made by myself.</p>
+                <p style="font-size: 0.9rem; margin-top:1rem;">Copyright &copy;2020 All rights reserved &nbsp;|&nbsp; View the source code <a href="https://github.com/jaredspickard/Connect4AI">here</a>&nbsp; | &nbsp;See more of my work and experience at <a href="http://jaredspickard.com">jaredspickard.com</a></p>
             </div>
         </div>
     </div>
@@ -62,6 +64,7 @@
 
     <!-- Custom JS -->
     <script src="{{ url_for('static', filename='javascript/index.js') }}"></script>
+    <script src="{{ url_for('static', filename='javascript/base.js') }}"></script>
 </body>
 
 </html>

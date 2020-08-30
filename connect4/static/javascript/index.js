@@ -32,10 +32,8 @@ function changedAIDifficulty(style) {
         document.getElementById("AIDifficulty").value = "Easy";
     } else if (style == 'warning') {
         document.getElementById("AIDifficulty").value = "Medium";
-    } else if (style == 'danger') {
-        document.getElementById("AIDifficulty").value = "Hard";
     } else {
-        document.getElementById("AIDifficulty").value = "Impossible";
+        document.getElementById("AIDifficulty").value = "Hard";
     }
 }
 
@@ -44,9 +42,17 @@ function changedAIDifficulty(style) {
  */
 function initializeGame() {
   console.log("Initializing Game.");
+  // Set the hidden tags for player names
+  document.getElementById("player0Name").value = document.getElementById("player0NameInput").value || "Player 1";
+  document.getElementById("player1Name").value = document.getElementById("player1NameInput").value || "Player 2";
+  // Reset the move counter
+  document.getElementById("moveCounter").value = 0;
   // Set the title of the modal
   var difficulty = document.getElementById("AIDifficulty").value;
   document.getElementById("connect4ModalTitle").innerHTML = "Connect 4 - " + difficulty;
+  // Show the turn title
+  document.getElementById("player-title").innerHTML = document.getElementById("player0Name").value + "'s turn.";
+  document.getElementById("player-title").className = "yellow-player-title";
   // Set the index of the currPlayer to be 0
   var currPlayer = 0;
   // Create a 7x6 array to represent the board
@@ -73,8 +79,14 @@ function initializeGame() {
 function updateBoard(board) {
     var htmlString = "<tr class='row-above'>";
     var pieceClass;
+    var color;
+    if (document.getElementById("currentPlayer").value == 0) {
+        color = "yellow";
+    } else {
+        color = "red";
+    }
     for (var i = 0; i < 7; i++) {
-        htmlString += "<td class='grid-position'><span class='c4-piece-above' onclick='makeMove("+i+")'></span></td>";
+        htmlString += "<td class='grid-position'><span class='c4-piece-above-"+color+"' onclick='makeMove("+i+")'></span></td>";
     }
     htmlString += "</tr>";
     for (var i = 5; i > -1; i--) {
@@ -122,8 +134,17 @@ function onSuccessMakeMove(retData) {
     var updatedBoard = retData["Board"];
     var updatedPlayerIndex = retData["Player"];
     var isWin = retData["Win"];
+    // Update the player index
+    document.getElementById("currentPlayer").value = updatedPlayerIndex;
     // Update the board
     updateBoard(updatedBoard);
+    // Update the player title and mouseover color
+    document.getElementById("player-title").innerHTML = document.getElementById("player"+updatedPlayerIndex+"Name").value + "'s turn.";
+    if (updatedPlayerIndex == 0) {
+        document.getElementById("player-title").className = "yellow-player-title";
+    } else {
+        document.getElementById("player-title").className = "red-player-title";
+    }
     // If the player index has changed, increment the move counter
     if (updatedPlayerIndex != document.getElementById("currentPlayer").value) {
         document.getElementById("moveCounter").value = (parseInt(document.getElementById("moveCounter").value, 10) + 1) + "";
@@ -131,7 +152,8 @@ function onSuccessMakeMove(retData) {
     console.log(document.getElementById("moveCounter").value);
     // Do some UI stuff if the game is over
     if (isWin) {
-        alert(updatedPlayerIndex + " wins!");
+        // Call the function that 
+        winGame(updatedPlayerIndex);
         // Show a new game button and some other UI stuff
         return;
     }
@@ -141,8 +163,6 @@ function onSuccessMakeMove(retData) {
         return;
     }
     document.getElementById("gameBoard").value = JSON.stringify(updatedBoard);
-    // Update the player index
-    document.getElementById("currentPlayer").value = updatedPlayerIndex;
     // If playing against an AI, call make move again
     if (document.getElementById("opponentType").value == "AI" && updatedPlayerIndex == 1) {
         console.log("About to make AI move")
@@ -155,11 +175,9 @@ function onSuccessMakeMove(retData) {
             data["Depth"] = 3;
         } else if (AIDifficulty == "Medium") {
             data["Depth"] = 4;
-        } else if (AIDifficulty == "Hard") {
-            data["Depth"] = 5;
         } else {
-            data["Depth"] = 6;
-        }
+            data["Depth"] = 5;
+        } 
         data = JSON.stringify(data);
         // call the server to add a tile of the current player to the current board
         $.post("makeMove", data, onSuccessMakeMove);

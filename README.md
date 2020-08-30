@@ -1,0 +1,1 @@
+Connect4AI is a Flask web app that I developed in August and September of 2020. This web app uses HTML, CSS, and JavaScript for the front end, python for the back end, and I am currently in the process of developing a leaderboard feature which will rely on a Postgres database.
