@@ -3,7 +3,7 @@
 {% block content %}
     <div class="page-content mx-auto">
         <div class="page-content">
-            <h1>Connect4AI</h1>
+            <h1>Connect4<span class="yellow-player-title">A</span><span class="red-player-title">I</span></h1>
             <hr><br>
             <div class="row">
                 <div class="col-lg-5 my-auto">
@@ -92,13 +92,21 @@
                         <h3 id="player-title" class="yellow-player-title">Player 1's turn</h3>
                     </span>
                     <table id="connect4Board" class="connect4-board mx-auto"></table>
-                </div>
-                <div class="modal-footer" style="text-align:center;">
-                    <div class="mx-auto">
-                        <button type="button" class="btn btn-lg btn-icon btn-outline-primary" style="display:none" onclick="initializeGame()">
-                            <span class="btn-inner--icon"><i class="fas fa-redo"></i></span>
-                            <span class="btn-inner--text">New Game</span>
-                        </button>
+                </div><br>
+                <div class="modal-footer">
+                    <div class="row mt-2 mb-2" style="width:100%">
+                        <div class="col">
+                            <button id="exitModalButton" type="button" class="btn btn-lg btn-icon btn-outline-danger mx-auto" style="display:none" data-dismiss="modal">
+                                <span class="btn-inner--icon"><i class="fas fa-times"></i></span>
+                                <span class="btn-inner--text">Exit</span>
+                            </button>
+                        </div>
+                        <div class="col">
+                            <button id="newGameButton" type="button" class="btn btn-lg btn-icon btn-outline-success mx-auto" style="display:none" onclick="initializeGame()">
+                                <span class="btn-inner--icon"><i class="fas fa-redo"></i></span>
+                                <span class="btn-inner--text">New Game</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>

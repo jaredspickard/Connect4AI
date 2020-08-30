@@ -29,6 +29,14 @@ img {
     height: 80px;
 }
 
+.c4-piece-above {
+    background-color: rgb(250, 250, 250);
+    border-radius: 50%;
+    width: 70px;
+    height: 70px;
+    display: inline-block;
+}
+
 .c4-piece-above-yellow {
     background-color: rgb(250, 250, 250);
     border-radius: 50%;

@@ -1,7 +1,7 @@
 from copy import deepcopy
 
 def isWin(board, colInd, rowInd):
-    """" Function to check if the most recent move resulted in a win 
+    """ Function to check if the most recent move resulted in a win 
         @param {object} board: the board before the move is made
         @param {int} colInd: the column the player wishes to place the piece in 
         @param {int} rowInd: the row that the piece will land in
@@ -88,6 +88,7 @@ def makeMove(data):
     # If there was not an error, then package the data and return it to the client
     updatedData = {}
     updatedData["Board"] = board
+    # Only change the player index if it did not result in a win
     if win:
         updatedData["Player"] = playerIndex
     else:
@@ -103,6 +104,7 @@ def makeHumanMove(board, playerIndex, colInd):
         @return {(boolean, string)} returns a tuple of a boolean representing if the move resulted in a win and a string with the error message"""
     # Get the index of the first 'x' in the column of index move, if it DNE, return an error message
     try:
+        print(colInd)
         rowInd = board[colInd].index("x")
         # Update the board so that this move is made
         board[colInd][rowInd] = str(playerIndex)
@@ -161,21 +163,34 @@ def getNextState(board, colInd, playerIndex):
         @param {int} playerIndex: the index of the player whose turn it is
         @return {(object, int, int)} returns a tuple consisting of the updated board, the column of the last move, and the row 
                                      returns row = -1 if the move is not valid"""
+    # Make a copy of the board
     boardCopy = deepcopy(board)
+    # Get the index of where the piece would be dropped
     rowInd = board[colInd].index("x")
+    # Update the board copy to have the piece
     boardCopy[colInd][rowInd] = str(playerIndex)
     return (boardCopy, colInd, rowInd)
 
 def minimax(board, depth, alpha, beta, playerIndex, maximizingPlayer, colInd, rowInd):
-    """ Function that uses the minimax algorithm to decide which move to make """
+    """ Function that uses the minimax algorithm to decide which move to make
+        @param {object} board: the current board
+        @param {int} depth: how many moves away from the max depth
+        @param {int} alpha: the current alpha value (for alpha-beta pruning) 
+        @param {int} beta: the current beta value
+        @param {int} playerIndex: the index of the current player
+        @param {boolean} maximizingPlayer: represents whether or not the current player is the maximizing player
+        @param {int} colInd: the column index of the most recently made move 
+        @param {int} rowInd: the row index of the most recently made move """
+    # Check if the move resulted in a win
     if isWin(board, colInd, rowInd):
+        # If the current player were to win, return 1000, else return -1000
         if playerIndex == board[colInd][rowInd]:
             return 1000
         else:
             return -1000
-    elif depth == 0:
+    elif depth == 0: # if the max depth has been reached, use the heuristic function on the board
         return evaluateBoard(board, playerIndex)
-    elif maximizingPlayer:
+    elif maximizingPlayer: # if maximizing player, use max
         value = -1*float('inf')
         validMoves = getValidMoves(board)
         for move in validMoves:
@@ -185,7 +200,7 @@ def minimax(board, depth, alpha, beta, playerIndex, maximizingPlayer, colInd, ro
             if alpha >= beta:
                 break
         return value
-    else:
+    else: # if minimizing player, use min
         value = float('inf')
         validMoves = getValidMoves(board)
         for move in validMoves:
