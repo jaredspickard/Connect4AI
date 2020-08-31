@@ -1,6 +1,0 @@
-from flask import Flask
-
-app = Flask(__name__)
-app.static_folder = 'static'
-
-from connect4 import routes
