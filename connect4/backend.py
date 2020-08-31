@@ -118,16 +118,16 @@ def makeAIMove(board, playerIndex, depth):
     """ Helper function to make the indicated move on the player's behalf.
         @param {object} board: the board before the move is made
         @param {int} colInd: the column the player wishes to place the piece in
+        @param {int} depth: the max depth of the agent
         @return {(boolean, string)} returns a tuple of a boolean representing if the move resulted in a win and a string with the error message"""
     # Get the list of valid moves
-    bestC = 3
-    bestR = 0
     bestScore = -1*float('inf')
     validMoves = getValidMoves(board)
     # Return False, None if there are no valid moves
     if not validMoves:
         print("No valid AI Moves")
         return False, None
+    _, bestC, bestR = getNextState(board, validMoves[0], playerIndex)
     # evaluate each move using minimax to find the best move
     for move in validMoves:
         nextState, c, r = getNextState(board, move, playerIndex)
@@ -161,15 +161,14 @@ def getNextState(board, colInd, playerIndex):
         @param {object} board: the board in its current state
         @param {int} colInd: the index of the column that the piece is being placed
         @param {int} playerIndex: the index of the player whose turn it is
-        @return {(object, int, int)} returns a tuple consisting of the updated board, the column of the last move, and the row 
-                                     returns row = -1 if the move is not valid"""
+        @return {(object, int, int)} returns a tuple consisting of the updated board, the column of the last move, and the row """
     # Make a copy of the board
     boardCopy = deepcopy(board)
     # Get the index of where the piece would be dropped
     rowInd = board[colInd].index("x")
     # Update the board copy to have the piece
     boardCopy[colInd][rowInd] = str(playerIndex)
-    return (boardCopy, colInd, rowInd)
+    return boardCopy, colInd, rowInd
 
 def minimax(board, depth, alpha, beta, playerIndex, maximizingPlayer, colInd, rowInd):
     """ Function that uses the minimax algorithm to decide which move to make
@@ -183,16 +182,16 @@ def minimax(board, depth, alpha, beta, playerIndex, maximizingPlayer, colInd, ro
         @param {int} rowInd: the row index of the most recently made move """
     # Check if the move resulted in a win
     if isWin(board, colInd, rowInd):
-        # If the current player were to win, return 1000, else return -1000
-        if playerIndex == board[colInd][rowInd]:
-            return 1000
-        else:
-            return -1000
+        if maximizingPlayer: # the current player is max, which means that the player that made the last move to win was min
+            return -1*float('inf')
+        else: # the current player is min, which means that the player that made the last move to win was max
+            return float('inf')
     elif depth == 0: # if the max depth has been reached, use the heuristic function on the board
-        return evaluateBoard(board, playerIndex)
+        return evaluateBoard(board, playerIndex, maximizingPlayer)
     elif maximizingPlayer: # if maximizing player, use max
         value = -1*float('inf')
         validMoves = getValidMoves(board)
+        # for each valid move, get the next state and run minimax
         for move in validMoves:
             nextState, c, r = getNextState(board, move, playerIndex)
             value = max(value, minimax(nextState, depth-1, alpha, beta, (playerIndex+1)%2, False, c, r))
@@ -203,6 +202,7 @@ def minimax(board, depth, alpha, beta, playerIndex, maximizingPlayer, colInd, ro
     else: # if minimizing player, use min
         value = float('inf')
         validMoves = getValidMoves(board)
+        # for each valid move, get the next state and run minimax
         for move in validMoves:
             nextState, c, r = getNextState(board, move, playerIndex)
             value = min(value, minimax(nextState, depth-1, alpha, beta, (playerIndex+1)%2, True, c, r))
@@ -211,8 +211,12 @@ def minimax(board, depth, alpha, beta, playerIndex, maximizingPlayer, colInd, ro
                 break
         return value
 
-def evaluateBoard(board, playerIndex):
-    """ Heuristic function that evaluates a board for a given player index """
+def evaluateBoard(board, playerIndex, maximizingPlayer):
+    """ Heuristic function that evaluates a board for a given player index.
+        @param {object} board: the current state of the board being examined
+        @param {int} playerIndex: the current player index
+        @param {boolean} maximizingPlayer: a boolean representing whether or not the current player is the maximizing agent
+        @return {float} returns a value representing the score of the board based on whether moves would result in 4-in-a-row"""
     value = 0 # the value of the board
     # Get the valid moves
     validMoves = getValidMoves(board)
@@ -222,9 +226,12 @@ def evaluateBoard(board, playerIndex):
         # see if this move would allow our player to win
         hypotheticalBoard, c, r = getNextState(board, move, playerIndex)
         if isWin(hypotheticalBoard, c, r):
-            value += 10
-        # see if this move would allow the other player to win
+            if maximizingPlayer:
+                return float('inf')
+            else:
+                return -1*float('inf')
+        # see if this move would allow the other player to win (don't return an infinity since it isn't their turn)
         hypotheticalBoard, c, r = getNextState(board, move, otherPlayerIndex)
         if isWin(hypotheticalBoard, c, r):
-            value -= 40
+            value -= 1000
     return value
