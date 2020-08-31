@@ -1,0 +1,98 @@
+img {
+    width: 100%;
+}
+
+.page-content {
+    margin-left: 5%;
+    margin-right: 5%;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    max-width:1500px;
+}
+
+.connect4-board {
+    width: 80%;
+    text-align: center;
+}
+
+.row-above {
+    width: 100%;
+}
+
+.c4-row {
+    background-color: blue;
+    width: 100%;
+}
+
+.grid-position {
+    width: 80px;
+    height: 80px;
+}
+
+.c4-piece-above {
+    background-color: rgb(250, 250, 250);
+    border-radius: 50%;
+    width: 70px;
+    height: 70px;
+    display: inline-block;
+}
+
+.c4-piece-above-yellow {
+    background-color: rgb(250, 250, 250);
+    border-radius: 50%;
+    width: 70px;
+    height: 70px;
+    display: inline-block;
+}
+
+.c4-piece-above-red {
+    background-color: rgb(250, 250, 250);
+    border-radius: 50%;
+    width: 70px;
+    height: 70px;
+    display: inline-block;
+}
+
+.c4-piece-above-yellow:hover {
+    transform: scale(1.1);
+    background-color: rgb(255, 225, 1);
+    cursor: pointer;
+}
+
+.c4-piece-above-red:hover {
+    transform: scale(1.1);
+    background-color: rgb(216, 8, 8);
+    cursor: pointer;
+}
+
+.c4-piece-blank {
+    background-color: white;
+    border-radius: 50%;
+    width: 70px;
+    height: 70px;
+    display: inline-block;
+}
+
+.c4-piece-red {
+    background-color: rgb(216, 8, 8);
+    border-radius: 50%;
+    width: 70px;
+    height: 70px;
+    display: inline-block;
+}
+
+.c4-piece-yellow {
+    background-color: rgb(255, 225, 1);
+    border-radius: 50%;
+    width: 70px;
+    height: 70px;
+    display: inline-block;
+}
+
+.yellow-player-title {
+    color: rgb(255, 183, 0);
+}
+
+.red-player-title {
+    color: rgb(216, 8, 8);
+}

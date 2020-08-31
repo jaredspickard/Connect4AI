@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="page-content mx-auto">
+        <div class="page-content">
+            <h1>Connect4<span class="yellow-player-title">A</span><span class="red-player-title">I</span></h1>
+            <hr><br>
+            <div class="row">
+                <div class="col-lg-5 my-auto">
+                    <div class="mx-auto mb-5" style="text-align:center"><img style="max-width: 600px;" alt="Picture of a Connect 4 Board" src="{{ url_for('static', filename='images/board.png') }}"></div>
+                </div>
+                <div class="col-lg-7 my-auto mx-auto" style="text-align: center; padding:1rem">
+                    <div class="row">
+                        <div class="col">
+                            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                <label class="btn btn-outline-warning active" onclick="playAgainstAIRadioButton()">
+                                    <input type="radio" name="options" id="option1" checked> Play Against AI
+                                </label>
+                                <label class="btn btn-outline-warning" onclick="playAgainstFriendRadioButton()">
+                                    <input type="radio" name="options" id="option2"> Play Against A Friend
+                                </label>
+                            </div>
+                        </div>
+                    </div><br><br>
+                    <div class="row">
+                        <div class="col">
+                            <h5>Player 1 Name</h5>
+                            <input id="player0NameInput" type="text" class="form-control mx-auto" style="max-width:400px" placeholder="Player 1">
+                        </div>
+                    </div><br><br>
+                    <div id="playAgainstAIOptions" class="row">
+                        <div class="col">
+                            <h5>AI Difficulty</h5>
+                            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                <label class="btn btn-outline-success active" onclick="changedAIDifficulty('success')">
+                                    <input type="radio" name="options" id="easyAIButton" checked> Easy
+                                </label>
+                                <label class="btn btn-outline-warning" onclick="changedAIDifficulty('warning')">
+                                    <input type="radio" name="options" id="mediumAIButton"> Medium
+                                </label>
+                                <label class="btn btn-outline-danger" onclick="changedAIDifficulty('danger')">
+                                    <input type="radio" name="options" id="hardAIButton"> Hard
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="playAgainstHumanOptions" class="row" style="display:none">
+                        <div class="col">
+                            <h5>Player 2 Name</h5>
+                            <input id="player1NameInput" type="text" class="form-control mx-auto" style="max-width:400px" placeholder="Player 2">
+                        </div>
+                    </div>
+                    <br><br>
+                    <!-- Button trigger modal -->
+                    <button id="beginGameButton" type="button" class="btn btn-success btn-lg btn-icon" data-toggle="modal" data-target="#connect4Modal" onclick="initializeGame()">
+                        <span class="btn-inner--text">Begin Game</span>
+                        <span class="btn-inner--icon"><i class="fas fa-play"></i></span>
+                    </button>
+                </div>
+            </div>
+            <br><br>
+            <h2>Development</h2>
+            <hr><br>
+            <h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Connect4AI is a Flask web app that I developed in August and September of 2020. This web app uses HTML, CSS, and JavaScript for the front end, python for the back end, and I am currently in the process of developing a leaderboard feature which will rely on a Postgres database. I had virtually no experience using flask or Postgres prior to beginning this project, so it's been a fun challenge to learn about them throughout development. </h5><br>
+            <h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This web app allows users to either play against a friend on the same device or play against an AI. The AI utilizes the minimax algorithm with alpha-beta pruning to decide its moves, with a varying depth for each difficulty (Easy: 3, Medium: 4, Hard: 5). The evaluation function that it uses examines the board and increments or decrements the score depending on the number of blank spaces that, if filled, would result in a winning game state. </h5><br>
+            <h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I intend to create a leaderboard that ranks players based on the following categories (for games that they win): AI Difficulty, Number of Moves, Time Taken to Win. I plan to complete this feature some time in September, as I am now balancing my time with classes and recruiting, and I have yet to work with Postgres in a Flask application. </h5>
+        </div>
+    </div>
+
+    <!-- Hidden Tags -->
+    <input type="hidden" id="selectedLink" value="homeOption">
+    <input type="hidden" id="opponentType" value="AI">
+    <input type="hidden" id="AIDifficulty" value="Easy">
+    <input type="hidden" id="gameBoard">
+    <input type="hidden" id="currentPlayer">
+    <input type="hidden" id="moveCounter" value="0">
+    <input type="hidden" id="player0Name">
+    <input type="hidden" id="player1Name">
+
+    <!-- Modal -->
+    <div class="modal fade" id="connect4Modal" data-backdrop="static" tabindex="-1" aria-labelledby="connect4Modal" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title" id="connect4ModalTitle">Connect 4</h2>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" style="text-align: center;">
+                    <span style="display:inline">
+                        <h3 id="player-title" class="yellow-player-title">Player 1's turn</h3>
+                    </span>
+                    <table id="connect4Board" class="connect4-board mx-auto"></table>
+                </div><br>
+                <div class="modal-footer">
+                    <div class="row mt-2 mb-2" style="width:100%">
+                        <div class="col">
+                            <button id="exitModalButton" type="button" class="btn btn-lg btn-icon btn-outline-danger mx-auto" style="display:none" data-dismiss="modal">
+                                <span class="btn-inner--icon"><i class="fas fa-times"></i></span>
+                                <span class="btn-inner--text">Exit</span>
+                            </button>
+                        </div>
+                        <div class="col">
+                            <button id="newGameButton" type="button" class="btn btn-lg btn-icon btn-outline-success mx-auto" style="display:none" onclick="initializeGame()">
+                                <span class="btn-inner--icon"><i class="fas fa-redo"></i></span>
+                                <span class="btn-inner--text">New Game</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
