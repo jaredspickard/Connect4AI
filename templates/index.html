@@ -3,7 +3,7 @@
 {% block content %}
     <div class="page-content mx-auto">
         <div class="page-content">
-            <h1>Connect4<span class="yellow-player-title">A</span><span class="red-player-title">I</span></h1>
+            <h1 id="c4aiTitle">Connect4<span class="yellow-player-title">A</span><span class="red-player-title">I</span></h1>
             <hr><br>
             <div class="row">
                 <div class="col-lg-5 my-auto">
@@ -59,11 +59,11 @@
                 </div>
             </div>
             <br><br>
-            <h2>Development</h2>
+            <h2 id="c4aiDevelopment">Development</h2>
             <hr><br>
-            <h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Connect4AI is a Flask web app that I developed in August and September of 2020. This web app uses HTML, CSS, and JavaScript for the front end, python for the back end, and I am currently in the process of developing a leaderboard feature which will rely on a Postgres database. I had virtually no experience using flask or Postgres prior to beginning this project, so it's been a fun challenge to learn about them throughout development. </h5><br>
+            <h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Connect4AI is a Flask web app that I developed in August of 2020. This web app uses HTML, CSS, and JavaScript for the front end, and python for the back end. I had virtually no experience using flask prior to beginning this project, so it's been a fun challenge to learn about it throughout development. </h5><br>
             <h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This web app allows users to either play against a friend on the same device or play against an AI. The AI utilizes the minimax algorithm with alpha-beta pruning to decide its moves, with a varying depth for each difficulty (Easy: 3, Medium: 4, Hard: 5). The evaluation function that it uses examines the board and increments or decrements the score depending on the number of blank spaces that, if filled, would result in a winning game state. </h5><br>
-            <h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I intend to create a leaderboard that ranks players based on the following categories (for games that they win): AI Difficulty, Number of Moves, Time Taken to Win. I plan to complete this feature some time in September, as I am now balancing my time with classes and recruiting, and I have yet to work with Postgres in a Flask application. </h5>
+            <!--h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I intend to create a leaderboard that ranks players based on the following categories (for games that they win): AI Difficulty, Number of Moves, Time Taken to Win. I plan to complete this feature some time in September, as I am now balancing my time with classes and recruiting, and I have yet to work with Postgres in a Flask application. </h5-->
         </div>
     </div>
 
